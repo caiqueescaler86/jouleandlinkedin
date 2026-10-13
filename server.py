@@ -9,6 +9,14 @@ from mcp.server.fastmcp import FastMCP
 
 load_dotenv()
 mcp = FastMCP("Joule LinkedIn Research", host=os.getenv("MCP_HOST", "127.0.0.1"), port=int(os.getenv("MCP_PORT", "8000")))
+def clean(value: str, maximum: int = 140) -> str:
+    """Validate user-supplied search terms before building a query."""
+    value = re.sub(r"[\r\n\t]+", " ", value or "").strip()
+    if not value or len(value) > maximum:
+        raise ValueError("Provide a non-empty search term within the length limit")
+    return value
+
+
 async def search(query: str, count: int = 8) -> dict:
     """Best-effort public metasearch; no account or API key required."""
     from ddgs import DDGS

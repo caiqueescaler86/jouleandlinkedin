@@ -8,6 +8,15 @@ Servidor MCP local para investigar profesionales, empresas y posibles stakeholde
 
 > **No es una API oficial de LinkedIn ni una integración afiliada.** No accede a perfiles privados, conexiones, mensajes ni al feed de una cuenta.
 
+## Elige cómo instalar
+
+| Opción | Para quién | Pasos |
+| --- | --- | --- |
+| **Instalación fácil (recomendada)** | Principiantes | Instala [Python 3.11+](https://www.python.org/downloads/), descarga el proyecto con **Code → Download ZIP**, extrae los archivos y ejecuta **`install.bat`** (Windows) o **`install.command`** (macOS). No necesitas Git. |
+| **Instalación manual** | Usuarios avanzados | Sigue los comandos de Terminal y Git en las secciones siguientes. |
+
+**Detalles de la instalación fácil:** El archivo prepara el entorno Python, instala las dependencias e inicia el servidor. Mantén la ventana abierta y conecta tu cliente MCP a **`http://127.0.0.1:8000/sse`**. Vuelve a ejecutar el mismo archivo para iniciar el servidor otro día; también comprueba las dependencias. En macOS, Gatekeeper puede bloquear scripts descargados sin firma: revisa el código y usa la instalación manual si es necesario. Puede ser necesario dar permiso de ejecución (`chmod +x install.command`) o ejecutar `bash install.command` en Terminal. Los scripts no instalan Python automáticamente ni evitan las políticas de seguridad.
+
 ## Instalación para principiantes (sin Git)
 
 Si nunca instalaste Python ni Git, **no necesitas instalar Git** para usar este proyecto.

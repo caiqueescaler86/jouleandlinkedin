@@ -1,4 +1,4 @@
-"""Read-only public professional research MCP for Joule for Work."""
+"""Read-only public professional research MCP for an MCP client."""
 import os
 import re
 from datetime import datetime, timezone
@@ -8,7 +8,7 @@ from dotenv import load_dotenv
 from mcp.server.fastmcp import FastMCP
 
 load_dotenv()
-mcp = FastMCP("Joule LinkedIn Research", host=os.getenv("MCP_HOST", "127.0.0.1"), port=int(os.getenv("MCP_PORT", "8000")))
+mcp = FastMCP("Professional Research", host=os.getenv("MCP_HOST", "127.0.0.1"), port=int(os.getenv("MCP_PORT", "8000")))
 def clean(value: str, maximum: int = 140) -> str:
     """Validate user-supplied search terms before building a query."""
     value = re.sub(r"[\r\n\t]+", " ", value or "").strip()
@@ -87,5 +87,5 @@ async def map_stakeholders(company: str, country: str = "", function: str = "mar
 
 
 if __name__ == "__main__":
-    # Legacy SSE endpoint /sse matching the Joule for Work screenshot.
+    # Legacy SSE endpoint /sse for compatible MCP clients.
     mcp.run(transport="sse")

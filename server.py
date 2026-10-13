@@ -4,41 +4,27 @@ import re
 from datetime import datetime, timezone
 from urllib.parse import urlparse
 
-import httpx
 from dotenv import load_dotenv
 from mcp.server.fastmcp import FastMCP
 
 load_dotenv()
 mcp = FastMCP("Joule LinkedIn Research", host=os.getenv("MCP_HOST", "127.0.0.1"), port=int(os.getenv("MCP_PORT", "8000")))
-SEARCH_URL = "https://api.search.brave.com/res/v1/web/search"
-
-
-def clean(value: str, maximum: int = 140) -> str:
-    value = re.sub(r"[\\r\\n\\t]+", " ", value or "").strip()
-    if not value or len(value) > maximum:
-        raise ValueError("Provide a non-empty search term within the length limit")
-    return value
-
-
 async def search(query: str, count: int = 8) -> dict:
-    key = os.getenv("BRAVE_SEARCH_API_KEY")
-    if not key:
-        return {"error": "BRAVE_SEARCH_API_KEY is not configured", "results": []}
+    """Best-effort public metasearch; no account or API key required."""
+    from ddgs import DDGS
     try:
-        async with httpx.AsyncClient(timeout=15.0, follow_redirects=False) as client:
-            response = await client.get(
-                SEARCH_URL,
-                params={"q": query, "count": max(1, min(count, 10)), "safesearch": "moderate"},
-                headers={"X-Subscription-Token": key, "Accept": "application/json"},
-            )
-            response.raise_for_status()
-            raw = response.json().get("web", {}).get("results", [])
-    except (httpx.HTTPError, ValueError) as exc:
-        return {"error": f"Search provider unavailable: {type(exc).__name__}", "results": []}
+        # ddgs is synchronous: run it outside the async event loop.
+        import asyncio
+        raw = await asyncio.to_thread(
+            lambda: list(DDGS(timeout=15).text(query, max_results=max(1, min(count, 10))))
+        )
+    except Exception as exc:
+        return {"error": f"Public search unavailable: {type(exc).__name__}",
+                "results": [], "query": query}
     results = []
     seen = set()
     for item in raw:
-        url = item.get("url", "")
+        url = item.get("href") or item.get("url") or ""
         parsed = urlparse(url)
         if parsed.scheme != "https" or not parsed.netloc or url in seen:
             continue
@@ -46,11 +32,12 @@ async def search(query: str, count: int = 8) -> dict:
         results.append({
             "title": item.get("title", ""),
             "url": url,
-            "snippet": item.get("description", ""),
+            "snippet": item.get("body") or item.get("description", ""),
             "source_domain": parsed.netloc.lower(),
         })
-    return {"query": query, "retrieved_at": datetime.now(timezone.utc).isoformat(), "results": results,
-            "notice": "Search snippets are unverified; do not assert current employment or identity without corroboration."}
+    return {"query": query, "retrieved_at": datetime.now(timezone.utc).isoformat(),
+            "results": results,
+            "notice": "Search snippets are unverified. Search availability and rate limits vary; do not claim verified employment or identity."}
 
 
 @mcp.tool()

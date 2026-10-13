@@ -1,6 +1,6 @@
-# Joule LinkedIn Research MCP
+# Professional Research MCP
 
-Conector MCP local para pesquisar profissionais, empresas e possíveis stakeholders a partir de **informações públicas indexadas na web**, diretamente pelo Joule for Work.
+Conector MCP local para pesquisar profissionais, empresas e possíveis stakeholders a partir de **informações públicas indexadas na web**, por meio de um cliente MCP compatível.
 
 **Gratuito para instalar:** não exige chave de API, cartão de crédito ou login no LinkedIn. A pesquisa depende de provedores públicos, que podem limitar ou bloquear consultas.
 
@@ -11,7 +11,7 @@ Conector MCP local para pesquisar profissionais, empresas e possíveis stakehold
 - Windows com PowerShell **ou** macOS com Terminal
 - Python **3.11 ou superior**
 - Git instalado
-- Joule for Work / Joule Desktop com suporte a conexões MCP locais
+- cliente MCP com suporte a conexões MCP locais
 - Conexão com a internet para pesquisar páginas públicas
 
 Verifique as ferramentas:
@@ -74,18 +74,18 @@ Mantenha o Terminal aberto enquanto utilizar o conector.
 ./.venv/bin/python server.py
 ```
 
-## Configuração no Joule for Work / Joule Desktop
+## Configuração no cliente MCP
 
 Com o servidor Python em execução:
 
-1. Abra o Joule for Work / Joule Desktop.
+1. Abra o cliente MCP.
 2. Vá à área de **conectores/extensões MCP** (o nome da opção pode variar conforme a versão).
 3. Escolha a opção para **adicionar um servidor MCP**.
 4. Preencha os campos:
 
 | Campo | Valor |
 | --- | --- |
-| Nome | LinkedIn Research |
+| Nome | Professional Research |
 | URL | `http://127.0.0.1:8000/sse` |
 | Protocolo | SSE |
 | Autenticação | Nenhuma |
@@ -93,7 +93,7 @@ Com o servidor Python em execução:
 | Chave secreta do cliente | Automático (se aparecer) |
 
 5. Salve e habilite o conector.
-6. Confirme que as ferramentas do conector aparecem no Joule.
+6. Confirme que as ferramentas do conector aparecem no cliente MCP.
 
 **Use `127.0.0.1`, não `localhost`:**
 
@@ -101,15 +101,15 @@ Com o servidor Python em execução:
 http://127.0.0.1:8000/sse
 ```
 
-O Joule precisa executar **na mesma máquina** do servidor ou ter acesso explícito ao serviço local. A conexão local não funcionará automaticamente a partir de uma instância somente na nuvem.
+O cliente MCP precisa executar **na mesma máquina** do servidor ou ter acesso explícito ao serviço local. A conexão local não funcionará automaticamente a partir de uma instância somente na nuvem.
 
 ## Primeiro teste
 
-No chat do Joule, experimente:
+No chat do cliente MCP, experimente:
 
 ```text
 Use a ferramenta research_professional para pesquisar o perfil
-público de "Joao Grilo". Mostre os links das fontes e não invente dados.
+público de "Nome Sobrenome". Mostre os links das fontes e não invente dados.
 ```
 
 Outro exemplo:
@@ -133,12 +133,12 @@ Os resultados são **indícios de pesquisa**, não confirmação de identidade, 
 
 ## Diagnóstico e problemas comuns
 
-### O Joule não consegue conectar
+### O cliente MCP não consegue conectar
 
 - Confirme que o servidor Python está rodando.
 - Confirme a URL exata: `http://127.0.0.1:8000/sse`.
 - Se a conexão foi criada anteriormente com `localhost`, edite ou recrie usando `127.0.0.1`.
-- Se o Joule apresentar falha ao reconectar, remova e adicione novamente o conector.
+- Se o cliente MCP apresentar falha ao reconectar, remova e adicione novamente o conector.
 
 **Teste SSE no Windows** (em um segundo PowerShell, sem parar o servidor):
 
@@ -157,7 +157,7 @@ O timeout após cinco segundos é esperado porque SSE mantém a conexão aberta.
 
 ### Muitas linhas `GET /sse 200 OK`
 
-O cliente pode estar abrindo novas conexões repetidamente. Verifique se o Joule está tentando reconectar. `200 OK` isoladamente não garante que o handshake MCP tenha sido concluído.
+O cliente pode estar abrindo novas conexões repetidamente. Verifique se o cliente MCP está tentando reconectar. `200 OK` isoladamente não garante que o handshake MCP tenha sido concluído.
 
 ### `MCP error -32602: Invalid request parameters`
 

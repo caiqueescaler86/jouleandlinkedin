@@ -1,39 +1,40 @@
 # Professional Research MCP
 
-Conector MCP local para pesquisar profissionais, empresas e possíveis stakeholders a partir de **informações públicas indexadas na web**, por meio de um cliente MCP compatível.
+[English](README.md) | [Português (Brasil)](README.pt-BR.md) | [Español](README.es.md)
 
-**Gratuito para instalar:** não exige chave de API, cartão de crédito ou login no LinkedIn. A pesquisa depende de provedores públicos, que podem limitar ou bloquear consultas.
+A local MCP server for researching professionals, companies, and potential stakeholders using **publicly indexed web information**. Works with compatible MCP clients supporting local SSE connections.
 
-> **Importante:** não é a API oficial do LinkedIn. Não acessa mensagens, conexões, perfis privados ou dados da conta do usuário.
+**Free to install:** no API key, payment card, or LinkedIn account required. Public search providers may rate-limit or block queries.
 
-## Requisitos
+> **Not an official LinkedIn API or affiliated integration.** No access to private profiles, account connections, messages, or feeds.
 
-- Windows com PowerShell **ou** macOS com Terminal
-- Python **3.11 ou superior**
-- Git instalado
-- cliente MCP com suporte a conexões MCP locais
-- Conexão com a internet para pesquisar páginas públicas
+## Requirements
 
-Verifique as ferramentas:
+- Windows (PowerShell) or macOS (Terminal)
+- Python 3.11 or later
+- Git
+- An MCP client supporting local SSE servers
+- Internet connection for public searches
 
-**Windows (PowerShell):**
+Check your installation:
+
+**Windows**
 ```powershell
 py --version
 git --version
 ```
 
-**macOS (Terminal):**
+**macOS**
 ```bash
 python3 --version
 git --version
 ```
 
-Se algum comando não funcionar, instale Python 3.11+ e Git antes de continuar. No Windows, se `py` não estiver disponível, use `python` nos comandos equivalentes.
+Install Python and Git first if needed. On Windows, use `python` instead of `py` if your Python installation does not include the launcher.
 
-## Instalação no Windows (PowerShell)
+## Install on Windows
 
-1. Abra o PowerShell.
-2. Copie e execute, **uma linha por vez**:
+Open PowerShell and run these commands **one at a time**:
 
 ```powershell
 git clone https://github.com/caiqueescaler86/jouleandlinkedin.git
@@ -43,20 +44,22 @@ py -3 -m venv .venv
 .\.venv\Scripts\python.exe server.py
 ```
 
-3. Mantenha essa janela aberta. O resultado esperado é semelhante a:
+Leave the terminal open. Expected startup message:
 
 ```text
 INFO: Application startup complete.
 INFO: Uvicorn running on http://127.0.0.1:8000
 ```
 
-**Para executar novamente em outro dia**, abra o PowerShell dentro da pasta do projeto e rode:
+To start again later, open PowerShell in the project folder and run:
 
 ```powershell
 .\.venv\Scripts\python.exe server.py
 ```
 
-## Instalação no macOS (Terminal)
+## Install on macOS
+
+Open Terminal and run:
 
 ```bash
 git clone https://github.com/caiqueescaler86/jouleandlinkedin.git
@@ -66,139 +69,108 @@ python3 -m venv .venv
 ./.venv/bin/python server.py
 ```
 
-Mantenha o Terminal aberto enquanto utilizar o conector.
+Keep Terminal open while using the connector. Restart it later with `./.venv/bin/python server.py`.
 
-**Para executar novamente:**
+## Connect your MCP client
 
-```bash
-./.venv/bin/python server.py
-```
+With the Python server running:
 
-## Configuração no cliente MCP
+1. Open an MCP client that supports local SSE connections.
+2. Find its MCP servers / connectors settings (labels vary by client).
+3. Add a new MCP server using:
 
-Com o servidor Python em execução:
-
-1. Abra o cliente MCP.
-2. Vá à área de **conectores/extensões MCP** (o nome da opção pode variar conforme a versão).
-3. Escolha a opção para **adicionar um servidor MCP**.
-4. Preencha os campos:
-
-| Campo | Valor |
+| Setting | Value |
 | --- | --- |
-| Nome | Professional Research |
+| Name | Professional Research |
 | URL | `http://127.0.0.1:8000/sse` |
-| Protocolo | SSE |
-| Autenticação | Nenhuma |
-| ID do cliente | Automático (se aparecer) |
-| Chave secreta do cliente | Automático (se aparecer) |
+| Transport | SSE |
+| Authentication | None (local development only) |
 
-5. Salve e habilite o conector.
-6. Confirme que as ferramentas do conector aparecem no cliente MCP.
+4. Save and enable the connection.
+5. Verify that the four tools appear in your MCP client.
 
-**Use `127.0.0.1`, não `localhost`:**
+**Use `127.0.0.1` instead of `localhost`:**
 
 ```text
 http://127.0.0.1:8000/sse
 ```
 
-O cliente MCP precisa executar **na mesma máquina** do servidor ou ter acesso explícito ao serviço local. A conexão local não funcionará automaticamente a partir de uma instância somente na nuvem.
+The MCP client must run on the same computer or have explicit access to its loopback server. A cloud-only client cannot automatically access your computer's `127.0.0.1`.
 
-## Primeiro teste
+## Try it
 
-No chat do cliente MCP, experimente:
-
-```text
-Use a ferramenta research_professional para pesquisar o perfil
-público de "Nome Sobrenome". Mostre os links das fontes e não invente dados.
-```
-
-Outro exemplo:
+Ask your MCP client:
 
 ```text
-Use map_stakeholders para pesquisar possíveis stakeholders
-de Marketing e CRM da empresa X no Brasil. Retorne nomes, cargos,
-fontes e sinalize informações não verificadas.
+Use research_professional to find public professional references
+for "Example Person". Include source URLs and do not invent facts.
 ```
 
-## Ferramentas disponíveis
+```text
+Use map_stakeholders to identify potential marketing and CRM
+stakeholders at Example Company in Brazil. Cite sources and
+flag unverified job titles or decision-making authority.
+```
 
-| Ferramenta | Para que serve |
+## Available tools
+
+| Tool | Purpose |
 | --- | --- |
-| `search_professionals(company, role, country, limit)` | Buscar profissionais por empresa, função e país |
-| `research_professional(name, company)` | Pesquisar referências públicas sobre uma pessoa |
-| `research_company(company, country)` | Pesquisar informações públicas de uma empresa |
-| `map_stakeholders(company, country, function)` | Identificar possíveis stakeholders e decisores |
+| `search_professionals(company, role, country, limit)` | Find publicly indexed professionals by company, role and country |
+| `research_professional(name, company)` | Research public references to a person |
+| `research_company(company, country)` | Find public company information |
+| `map_stakeholders(company, country, function)` | Discover possible stakeholders |
 
-Os resultados são **indícios de pesquisa**, não confirmação de identidade, vínculo empregatício ou poder de decisão.
+Results are **unverified research leads**, not confirmed identities, employment or decision-making authority.
 
-## Diagnóstico e problemas comuns
+## Troubleshooting
 
-### O cliente MCP não consegue conectar
+**Cannot connect:** Confirm that the Python server is running and the URL is exactly `http://127.0.0.1:8000/sse`. If you previously used `localhost`, recreate the connection with `127.0.0.1`.
 
-- Confirme que o servidor Python está rodando.
-- Confirme a URL exata: `http://127.0.0.1:8000/sse`.
-- Se a conexão foi criada anteriormente com `localhost`, edite ou recrie usando `127.0.0.1`.
-- Se o cliente MCP apresentar falha ao reconectar, remova e adicione novamente o conector.
-
-**Teste SSE no Windows** (em um segundo PowerShell, sem parar o servidor):
+**Check SSE on Windows** (in a second PowerShell window):
 
 ```powershell
 curl.exe -N --max-time 5 http://127.0.0.1:8000/sse
 ```
 
-A resposta esperada começa com:
+Expected beginning:
 
 ```text
 event: endpoint
 data: /messages/?session_id=...
 ```
 
-O timeout após cinco segundos é esperado porque SSE mantém a conexão aberta. Esse teste confirma o endpoint SSE, **não** a execução completa de uma ferramenta MCP.
+The five-second timeout is normal for a persistent SSE connection. This checks the SSE endpoint, **not** the full MCP tool handshake.
 
-### Muitas linhas `GET /sse 200 OK`
+**Repeated `GET /sse 200 OK`:** The client may be reconnecting. HTTP 200 alone does not prove successful MCP initialization.
 
-O cliente pode estar abrindo novas conexões repetidamente. Verifique se o cliente MCP está tentando reconectar. `200 OK` isoladamente não garante que o handshake MCP tenha sido concluído.
+**`MCP error -32602: Invalid request parameters`:** Reconnect the client. If it persists, collect the exact error and server logs to investigate request compatibility.
 
-### `MCP error -32602: Invalid request parameters`
+**`Error: name 'clean' is not defined`:** Update the repository; this bug was fixed. Restart the server.
 
-Pode haver incompatibilidade ou parâmetros inválidos na comunicação MCP. Tente reconectar o conector; se persistir, capture a mensagem de erro e os logs para diagnóstico.
+**No search results:** Public search providers may be unavailable or rate-limited. Empty results do not necessarily mean the MCP connection failed.
 
-### `Error: name 'clean' is not defined`
+## Update
 
-Atualize o projeto para a versão mais recente (o problema foi corrigido):
+Stop the server with `Ctrl+C`, then run:
 
-```powershell
-git pull
-```
-
-Reinicie o servidor depois da atualização.
-
-### A pesquisa não encontra resultados
-
-O mecanismo público de pesquisa pode limitar consultas, estar indisponível ou não encontrar perfis indexados. Isso não significa necessariamente que o MCP esteja desconectado.
-
-## Atualização
-
-Pare o servidor com `Ctrl+C`. Na pasta do projeto:
-
-**Windows:**
+**Windows**
 ```powershell
 git pull
 .\.venv\Scripts\python.exe -m pip install -r requirements.txt
 .\.venv\Scripts\python.exe server.py
 ```
 
-**macOS:**
+**macOS**
 ```bash
 git pull
 ./.venv/bin/python -m pip install -r requirements.txt
 ./.venv/bin/python server.py
 ```
 
-## Segurança e limitações
+## Security and limitations
 
-- O servidor escuta somente em `127.0.0.1` por padrão.
-- **Não exponha esse servidor sem autenticação na internet ou em redes compartilhadas.**
-- O projeto faz consultas públicas por meio da biblioteca `ddgs`, sem autenticação no LinkedIn.
-- Fontes e trechos podem estar incompletos ou desatualizados; valide antes de tomar decisões comerciais.
-- Respeite termos de serviço, políticas corporativas e legislação de proteção de dados.
+- The server binds to `127.0.0.1` by default. **Never expose it publicly without authentication.**
+- Searches use the `ddgs` public metasearch package, not authenticated LinkedIn access.
+- Verify sources and professional details before making business decisions.
+- Follow provider terms, corporate policies, and applicable privacy laws.

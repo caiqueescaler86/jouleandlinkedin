@@ -116,7 +116,7 @@ Outro exemplo:
 
 ```text
 Use map_stakeholders para pesquisar possíveis stakeholders
-de Marketing e CRM da PUMA no Brasil. Retorne nomes, cargos,
+de Marketing e CRM da empresa X no Brasil. Retorne nomes, cargos,
 fontes e sinalize informações não verificadas.
 ```
 

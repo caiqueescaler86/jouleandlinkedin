@@ -8,6 +8,38 @@ A local MCP server for researching professionals, companies, and potential stake
 
 > **Not an official LinkedIn API or affiliated integration.** No access to private profiles, account connections, messages, or feeds.
 
+## Beginner setup (no Git required)
+
+If you have never installed Python or Git, **you do not need Git** to use this project.
+
+1. Install Python 3.11 or later from the [official Python website](https://www.python.org/downloads/). On Windows, enable **Add python.exe to PATH** if the installer offers it.
+2. Open the [project repository](https://github.com/caiqueescaler86/jouleandlinkedin). Click **Code → Download ZIP**.
+3. Extract the ZIP into a folder you can find (for example, Documents).
+4. Open the extracted `jouleandlinkedin-main` folder.
+5. **Windows:** Click the folder's address bar, type `powershell`, and press Enter. Run the commands below **one at a time**:
+
+```powershell
+py -3 -m venv .venv
+.\.venv\Scripts\python.exe -m pip install -r requirements.txt
+.\.venv\Scripts\python.exe server.py
+```
+
+If `py` is not recognized, try `python -m venv .venv` instead.
+
+6. **macOS:** Open Terminal, type `cd ` (including the space), drag the extracted folder into Terminal, and press Enter. Then run:
+
+```bash
+python3 -m venv .venv
+./.venv/bin/python -m pip install -r requirements.txt
+./.venv/bin/python server.py
+```
+
+7. Leave the terminal window open. Configure your MCP client using **`http://127.0.0.1:8000/sse`** as described below.
+
+**Next time:** Reopen the terminal in the project folder and run only the last command (`server.py`). To update a ZIP installation, download and extract the latest ZIP again, then repeat the setup in the new folder.
+
+**Troubleshooting for beginners:** If Python cannot be found, close and reopen the terminal after installation and check `py --version` (Windows) or `python3 --version` (macOS). If the installation fails on a company-managed device, contact your IT administrator; do not bypass corporate security restrictions.
+
 ## Requirements
 
 - Windows (PowerShell) or macOS (Terminal)

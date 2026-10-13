@@ -9,6 +9,38 @@ Conector MCP local para pesquisar profissionais, empresas e possíveis stakehold
 
 > **Importante:** não é a API oficial do LinkedIn. Não acessa mensagens, conexões, perfis privados ou dados da conta do usuário.
 
+## Instalação para iniciantes (sem Git)
+
+Se você nunca instalou Python ou Git, **não precisa instalar o Git** para usar este projeto.
+
+1. Instale o Python 3.11 ou superior pelo [site oficial](https://www.python.org/downloads/). No Windows, marque **Add python.exe to PATH** se essa opção aparecer.
+2. Acesse o [repositório do projeto](https://github.com/caiqueescaler86/jouleandlinkedin), clique em **Code → Download ZIP**.
+3. Extraia o ZIP em uma pasta fácil de encontrar, como Documentos.
+4. Abra a pasta extraída `jouleandlinkedin-main`.
+5. **Windows:** Clique na barra de endereço da pasta, digite `powershell` e pressione Enter. Execute os comandos abaixo **um por vez**:
+
+```powershell
+py -3 -m venv .venv
+.\.venv\Scripts\python.exe -m pip install -r requirements.txt
+.\.venv\Scripts\python.exe server.py
+```
+
+Se `py` não funcionar, experimente `python -m venv .venv`.
+
+6. **macOS:** Abra o Terminal, digite `cd ` (com espaço), arraste a pasta extraída para o Terminal e pressione Enter. Depois execute:
+
+```bash
+python3 -m venv .venv
+./.venv/bin/python -m pip install -r requirements.txt
+./.venv/bin/python server.py
+```
+
+7. Mantenha o terminal aberto. Configure o cliente MCP com a URL **`http://127.0.0.1:8000/sse`**, conforme explicado abaixo.
+
+**Nas próximas vezes:** Abra o terminal na pasta do projeto e execute apenas o último comando (`server.py`). Para atualizar uma instalação por ZIP, baixe e extraia a versão mais recente e repita a configuração na nova pasta.
+
+**Se der erro:** Após instalar Python, feche e reabra o terminal e confira `py --version` (Windows) ou `python3 --version` (macOS). Em computadores corporativos bloqueados, solicite ajuda à TI; não contorne as políticas de segurança.
+
 ## Requisitos
 
 - Windows com PowerShell **ou** macOS com Terminal

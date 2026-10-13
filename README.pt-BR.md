@@ -9,6 +9,15 @@ Conector MCP local para pesquisar profissionais, empresas e possíveis stakehold
 
 > **Importante:** não é a API oficial do LinkedIn. Não acessa mensagens, conexões, perfis privados ou dados da conta do usuário.
 
+## Escolha como instalar
+
+| Opção | Para quem | Como funciona |
+| --- | --- | --- |
+| **Instalação fácil (recomendada)** | Iniciantes | Instale o [Python 3.11+](https://www.python.org/downloads/), baixe o projeto em **Code → Download ZIP**, extraia e execute **`install.bat`** (Windows) ou **`install.command`** (macOS). Não precisa de Git. |
+| **Instalação manual** | Usuários avançados | Siga os comandos de terminal e Git nas seções abaixo. |
+
+**Detalhes da instalação fácil:** O arquivo prepara o ambiente Python, instala as dependências e inicia o servidor. Mantenha a janela aberta e configure o cliente MCP com **`http://127.0.0.1:8000/sse`**. Nas próximas vezes, execute o mesmo arquivo para iniciar o servidor; ele também verifica as dependências. No macOS, o Gatekeeper pode bloquear scripts baixados sem assinatura: revise o código e use a instalação manual se necessário. Talvez seja preciso conceder permissão de execução (`chmod +x install.command`) ou executar `bash install.command` no Terminal. Os scripts não instalam o Python automaticamente nem contornam políticas de segurança.
+
 ## Instalação para iniciantes (sem Git)
 
 Se você nunca instalou Python ou Git, **não precisa instalar o Git** para usar este projeto.

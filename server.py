@@ -1,0 +1,96 @@
+"""Read-only public professional research MCP for Joule for Work."""
+import os
+import re
+from datetime import datetime, timezone
+from urllib.parse import urlparse
+
+import httpx
+from dotenv import load_dotenv
+from mcp.server.fastmcp import FastMCP
+
+load_dotenv()
+mcp = FastMCP("Joule LinkedIn Research", host=os.getenv("MCP_HOST", "127.0.0.1"), port=int(os.getenv("MCP_PORT", "8000")))
+SEARCH_URL = "https://api.search.brave.com/res/v1/web/search"
+
+
+def clean(value: str, maximum: int = 140) -> str:
+    value = re.sub(r"[\\r\\n\\t]+", " ", value or "").strip()
+    if not value or len(value) > maximum:
+        raise ValueError("Provide a non-empty search term within the length limit")
+    return value
+
+
+async def search(query: str, count: int = 8) -> dict:
+    key = os.getenv("BRAVE_SEARCH_API_KEY")
+    if not key:
+        return {"error": "BRAVE_SEARCH_API_KEY is not configured", "results": []}
+    try:
+        async with httpx.AsyncClient(timeout=15.0, follow_redirects=False) as client:
+            response = await client.get(
+                SEARCH_URL,
+                params={"q": query, "count": max(1, min(count, 10)), "safesearch": "moderate"},
+                headers={"X-Subscription-Token": key, "Accept": "application/json"},
+            )
+            response.raise_for_status()
+            raw = response.json().get("web", {}).get("results", [])
+    except (httpx.HTTPError, ValueError) as exc:
+        return {"error": f"Search provider unavailable: {type(exc).__name__}", "results": []}
+    results = []
+    seen = set()
+    for item in raw:
+        url = item.get("url", "")
+        parsed = urlparse(url)
+        if parsed.scheme != "https" or not parsed.netloc or url in seen:
+            continue
+        seen.add(url)
+        results.append({
+            "title": item.get("title", ""),
+            "url": url,
+            "snippet": item.get("description", ""),
+            "source_domain": parsed.netloc.lower(),
+        })
+    return {"query": query, "retrieved_at": datetime.now(timezone.utc).isoformat(), "results": results,
+            "notice": "Search snippets are unverified; do not assert current employment or identity without corroboration."}
+
+
+@mcp.tool()
+async def search_professionals(company: str, role: str, country: str = "", limit: int = 8) -> dict:
+    """Find publicly indexed professional pages by company, role and optional country; results are leads, not verified identities."""
+    q = f'site:linkedin.com/in/ "{clean(company)}" "{clean(role)}"'
+    if country.strip():
+        q += f' "{clean(country)}"'
+    return await search(q, limit)
+
+
+@mcp.tool()
+async def research_professional(name: str, company: str = "") -> dict:
+    """Find public references for a named professional. Does not access private LinkedIn profile data."""
+    q = f'"{clean(name)}"'
+    if company.strip():
+        q += f' "{clean(company)}"'
+    return await search(q + " LinkedIn career biography", 8)
+
+
+@mcp.tool()
+async def research_company(company: str, country: str = "") -> dict:
+    """Find official company information, leadership and recent public coverage."""
+    q = f'"{clean(company)}"'
+    if country.strip():
+        q += f' "{clean(country)}"'
+    return await search(q + " official website leadership marketing news", 10)
+
+
+@mcp.tool()
+async def map_stakeholders(company: str, country: str = "", function: str = "marketing CRM") -> dict:
+    """Discover possible decision-makers through public results; does not infer authority as fact."""
+    q = f'"{clean(company)}" "{clean(function)}" (director OR head OR VP OR chief)'
+    if country.strip():
+        q += f' "{clean(country)}"'
+    result = await search(q, 10)
+    result["guidance"] = "Return candidates with citations, mark titles and decision authority unverified until independently corroborated."
+    return result
+
+
+if __name__ == "__main__":
+    # Legacy SSE endpoint /sse matching the Joule for Work screenshot.
+    mcp.run(transport="sse")

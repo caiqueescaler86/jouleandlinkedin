@@ -8,6 +8,38 @@ Servidor MCP local para investigar profesionales, empresas y posibles stakeholde
 
 > **No es una API oficial de LinkedIn ni una integración afiliada.** No accede a perfiles privados, conexiones, mensajes ni al feed de una cuenta.
 
+## Instalación para principiantes (sin Git)
+
+Si nunca instalaste Python ni Git, **no necesitas instalar Git** para usar este proyecto.
+
+1. Instala Python 3.11 o posterior desde el [sitio oficial](https://www.python.org/downloads/). En Windows, activa **Add python.exe to PATH** si aparece esa opción.
+2. Abre el [repositorio del proyecto](https://github.com/caiqueescaler86/jouleandlinkedin), haz clic en **Code → Download ZIP**.
+3. Extrae el ZIP en una carpeta fácil de encontrar, por ejemplo Documentos.
+4. Abre la carpeta extraída `jouleandlinkedin-main`.
+5. **Windows:** Haz clic en la barra de direcciones de la carpeta, escribe `powershell` y presiona Enter. Ejecuta los comandos **uno por uno**:
+
+```powershell
+py -3 -m venv .venv
+.\.venv\Scripts\python.exe -m pip install -r requirements.txt
+.\.venv\Scripts\python.exe server.py
+```
+
+Si `py` no funciona, prueba `python -m venv .venv`.
+
+6. **macOS:** Abre Terminal, escribe `cd ` (con espacio), arrastra la carpeta extraída a Terminal y presiona Enter. Luego ejecuta:
+
+```bash
+python3 -m venv .venv
+./.venv/bin/python -m pip install -r requirements.txt
+./.venv/bin/python server.py
+```
+
+7. Mantén la ventana abierta. Configura el cliente MCP con la URL **`http://127.0.0.1:8000/sse`**, según las instrucciones de abajo.
+
+**Para volver a iniciar:** Abre la terminal en la carpeta del proyecto y ejecuta solamente el último comando (`server.py`). Para actualizar una instalación ZIP, descarga y extrae la última versión y repite la configuración en la nueva carpeta.
+
+**Si hay problemas:** Después de instalar Python, cierra y vuelve a abrir la terminal. Verifica `py --version` (Windows) o `python3 --version` (macOS). Si tu equipo es administrado por una empresa, solicita ayuda a TI; no evites las restricciones de seguridad.
+
 ## Requisitos
 
 - Windows con PowerShell o macOS con Terminal
